@@ -21,13 +21,14 @@ The ipset command doesn't work under OpenVZ. It works fine on dedicated and full
 1. wget -O /usr/local/sbin/update-whitelist.sh
    https://raw.githubusercontent.com/sublocale/ipset-whitelist/master/update-whitelist.sh
 2. chmod +x /usr/local/sbin/update-whitelist.sh
-2. mkdir -p /etc/ipset-whitelist ; wget -O
+3. mkdir -p /etc/ipset-whitelist ; wget -O
    /etc/ipset-whitelist/ipset-whitelist.conf
    https://raw.githubusercontent.com/sublocale/ipset-whitelist/master/ipset-whitelist.conf
-2. Modify ipset-whitelist.conf according to your needs. Per default, the whitelisted IP addresses will be saved to /etc/ipset-whitelist/ip-whitelist.restore
-3. apt-get install ipset
-4. Create the ipset whitelist and insert it into your iptables input filter (see below). After proper testing, make sure to persist it in your firewall script or similar or the rules will be lost after the next reboot.
-5. Auto-update the whitelist using a cron job
+4. touch /etc/ipset-whitelist/ip-whitelist-custom.list
+5. Modify ipset-whitelist.conf according to your needs. Per default, the whitelisted IP addresses will be saved to /etc/ipset-whitelist/ip-whitelist.restore
+6. apt-get install ipset
+7. Create the ipset whitelist and insert it into your iptables input filter (see below). After proper testing, make sure to persist it in your firewall script or similar or the rules will be lost after the next reboot.
+8. Auto-update the whitelist using a cron job
 
 ## iptables filter rule
 ```
