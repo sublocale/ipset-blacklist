@@ -1,33 +1,23 @@
 ipset-whitelist
 ===============
 
-<<<<<<< HEAD
 FORKED from https://github.com/trick77/ipset-blacklist and converted to
 a whitelisting script.
 
-A tiny Bash shell script which uses ipset and iptables to allow a large number of IP addresses published in IP whitelists. ipset uses a hashtable to store/fetch IP addresses and thus the IP lookup is a lot (!) faster than thousands of sequentially parsed iptables ban rules.
-=======
-A Bash shell script which uses ipset and iptables to ban a large number of IP addresses published in IP blacklists. ipset uses a hashtable to store/fetch IP addresses and thus the IP lookup is a lot (!) faster than thousands of sequentially parsed iptables ban rules. ~~However, the limit of an ipset list is 2^16 entries.~~
->>>>>>> develop
+A Bash shell script which uses ipset and iptables to allow a large number of IP addresses published in IP whitelists. ipset uses a hashtable to store/fetch IP addresses and thus the IP lookup is a lot (!) faster than thousands of sequentially parsed iptables ban rules.
+
 
 The ipset command doesn't work under OpenVZ. It works fine on dedicated and fully virtualized servers like KVM though.
 
 ## What's new
-<<<<<<< HEAD
+
+- 05/10/2018: Added regex filter improvements from [@sbujam](https://github.com/sbujam)
+- 08/15/2017: Filtering default gateway and multicast ranges
 - 11/30/2017: Forked and converted to whitelist
 - 08/15/2017: Filtering default gateway and multicast ranges
 - 01/20/2017: Ignoring "Service unavailable" HTTP status code, removed IGNORE_CURL_ERRORS 
 - 11/04/2016: Documentation added to show how to prevent fail2ban from inserting its rules above the ipset-whitelist when restarting the fail2ban service
 - 11/11/2015: Merged all suggestions from https://github.com/drzraf
-=======
-- 05/10/2018: Added regex filter improvements from [@sbujam](https://github.com/sbujam)
-- 08/15/2017: Filtering default gateway and multicast ranges
-- 01/20/2017: Ignoring "Service unavailable" HTTP status code, removed IGNORE_CURL_ERRORS 
-- 11/04/2016: Documentation added to show how to prevent fail2ban from inserting its rules above the ipset-blacklist when restarting the fail2ban service
-- 11/11/2015: Merged all suggestions from [@drzraf](https://github.com/drzraf)
->>>>>>> develop
-- 10/24/2015: Outsourced the entire configuration in it's own configuration file. Makes updating the shell script way easier!
-- 10/22/2015: Changed the documentation, the script should be put in /usr/local/sbin not /usr/local/bin
 
 ## Quick start for Debian/Ubuntu based installations
 1. wget -O /usr/local/sbin/update-whitelist.sh
@@ -48,12 +38,8 @@ The ipset command doesn't work under OpenVZ. It works fine on dedicated and full
 ipset restore < /etc/ipset-whitelist/ip-whitelist.restore
 iptables -I INPUT 1 -m set --match-set whitelist src -j ACCEPT
 ```
-<<<<<<< HEAD
-Make sure to run this snippet in a firewall script or just insert it to
-/etc/rc.local.
-=======
+
 Make sure to run this snippet in a firewall script or just insert it to /etc/rc.local.
->>>>>>> develop
 
 ## Cron job
 In order to auto-update the whitelist, copy the following code into /etc/cron.d/update-whitelist. Don't update the list too often or some whitelist providers will ban your IP address. Once a day should be OK though.
@@ -75,11 +61,9 @@ num   pkts bytes target            prot opt in  out source   destination
 3      912 69233 fail2ban-ssh-ddos tcp  --  any any anywhere anywhere     multiport dports ssh
 4      912 69233 fail2ban-ssh      tcp  --  any any anywhere anywhere     multiport dports ssh
 ```
-<<<<<<< HEAD
-Since iptable rules are parsed sequentally, the ipset-whitelist is most effective if it's the **topmost** rule in iptable's INPUT chain. However, restarting fail2ban usually leads to a situation, where fail2ban inserts its rules above our whitelist drop rule. To prevent this from happening, we have to tell fail2ban to insert its rules at the 2nd position. Since the iptables-multiport action is the default ban-action, we have to add a file to /etc/fail2ban/action.d:
-=======
+
 Since iptable rules are parsed sequentally, the ipset-blacklist is most effective if it's the **topmost** rule in iptable's INPUT chain. However, restarting fail2ban usually leads to a situation, where fail2ban inserts its rules above our blacklist drop rule. To prevent this from happening we have to tell fail2ban to insert its rules at the 2nd position. Since the iptables-multiport action is the default ban-action we have to add a file to /etc/fail2ban/action.d:
->>>>>>> develop
+
 ```
 tee << EOF /etc/fail2ban/action.d/iptables-multiport.local
 [Definition]
